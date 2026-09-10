@@ -111,7 +111,7 @@ function leerDatos() {
       placa: fila[idx.placa].toString().trim().toUpperCase(),
       tipo_vehiculo: (fila[idx.tipo_vehiculo] || '').toString().trim().toLowerCase(),
       entidad: (fila[idx.entidad] || '').toString().trim(),
-      fecha: (fila[idx.fecha] || '').toString().trim(),
+      fecha: formatearFecha(fila[idx.fecha]),
       infraccion: (fila[idx.infraccion] || '').toString().trim(),
       monto: Number(fila[idx.monto]) || 0,
       estado: (fila[idx.estado] || 'pendiente').toString().trim().toLowerCase(),
@@ -120,6 +120,14 @@ function leerDatos() {
 
   cache.put(CACHE_KEY, JSON.stringify(multas), CACHE_TTL_SEG);
   return multas;
+}
+
+/** Convierte celdas de fecha (Date) o texto a formato ISO YYYY-MM-DD */
+function formatearFecha(valor) {
+  if (valor instanceof Date) {
+    return Utilities.formatDate(valor, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  }
+  return (valor || '').toString().trim();
 }
 
 // ============================================================
