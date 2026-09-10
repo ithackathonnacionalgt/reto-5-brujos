@@ -43,14 +43,17 @@ src/
 │   ├── ui/               shadcn (NO editar a mano; usar npx shadcn add)
 │   └── IdiomaSelector.jsx
 └── screens/
-    ├── Home.jsx          P0: Landing + placa + idioma
-    ├── Placas.jsx        P0.5: Selección de placa (localStorage)
-    ├── Municipios.jsx    P0.2c: Vista municipalidades (gris/color)
-    ├── Form.jsx          P1: Formulario de boleta
-    ├── Explicador.jsx    P2: Explicador + botones "?"
-    ├── Semaforo.jsx      P3: Semáforo de legalidad
-    ├── QueHago.jsx       P3.5: Pagar / oposición / prescripción
-    └── Accion.jsx        P4: PDF / pago
+    ├── Entrada.jsx       Punto de entrada (QR/URL) → redirige a idioma/bienvenida
+    ├── Idioma.jsx        Selección de idioma (es / k'iche' / kaqchikel)
+    ├── Bienvenida.jsx    Landing "¿HAS SIDO MULTADO?" + ¿Qué procede?
+    ├── Menu.jsx          Menú principal (3 flujos)
+    ├── Buscar.jsx        Flujo A: ingreso de placa
+    ├── Municipios.jsx    Flujo A: resultados por municipalidad (gris/color)
+    ├── FormFisica.jsx    Flujo B: formulario de multa física
+    ├── Info.jsx          Flujo C: tabla informativa (tipos de multas)
+    ├── Detalle.jsx       Detalle: razón + stepper semáforo + apelar/pagar
+    ├── Apelacion.jsx     Info de apelación
+    └── Pago.jsx          Info de pago
 public/
 ├── infracciones.json     Catálogo (fuente: LosBrujos/data/infracciones.json)
 ├── entidades.json        Placeholder — Diego completa
@@ -66,6 +69,16 @@ data/
 3. **i18n**: la UI nunca tiene texto directo — siempre `t('clave')`. Al agregar una clave, agregarla en los 3 JSON.
 4. **core.js** es lógica pura (sin React, sin JSX) — testeable.
 5. **Git**: cada uno trabaja en SU rama (`kevin-frontend`, `lemus-logica`, `diego-investigador`, `uriel-disenador`). NUNCA push directo a main — main solo lo toca André.
+
+## Rutas (arquitectura de Lemus — ver `arquitectura_de_flujo_de_multas.json`)
+
+```
+/ → /idioma → /bienvenida → /menu
+  ├── /buscar → /resultados?placa=X → /detalle?placa=X&entidad=Y
+  ├── /multa-fisica → /detalle?placa=X&fecha=Y&entidad=Z
+  └── /info
+/detalle → /apelacion | /pago
+```
 
 ## TODO pendientes (por rol)
 

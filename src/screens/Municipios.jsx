@@ -1,7 +1,7 @@
-// P0.2c: Vista de municipalidades — gris=sin multas, color=con multas, número.
+// pantalla_resultados_muni (Flujo A): gris=sin multas, color=con multas, badge con número.
 // Usa el cache diario (1 fetch por día) de Google Sheets + Apps Script.
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -26,12 +26,14 @@ const NOMBRES_ENTIDAD = {
 export default function Municipios() {
   const { t } = useI18n()
   const navigate = useNavigate()
+  const [params] = useSearchParams()
   const [placas] = useLocalStorage('placas', [])
   const [municipios, setMunicipios] = useState(MOCK_MUNICIPIOS)
   const [tipoVehiculo, setTipoVehiculo] = useState('')
   const [actualizando, setActualizando] = useState(false)
 
-  const placa = placas[placas.length - 1] ?? ''
+  // Placa viene del query param (?placa=) o de la última guardada
+  const placa = params.get('placa') ?? placas[placas.length - 1] ?? ''
 
   useEffect(() => {
     let activo = true
@@ -91,7 +93,11 @@ export default function Municipios() {
           {municipios.map((m) => (
             <button
               key={m.id}
-              onClick={() => navigate('/form')}
+              onClick={() =>
+                navigate(
+                  `/detalle?placa=${encodeURIComponent(placa)}&entidad=${m.id}`
+                )
+              }
               className={`flex w-full items-center justify-between rounded-lg border p-4 text-left transition ${
                 m.multas > 0
                   ? 'border-red-300 bg-red-50 hover:bg-red-100'
