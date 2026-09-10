@@ -89,3 +89,25 @@ export function validarFechaNoFutura(fecha) {
   const f = new Date(fecha)
   return !isNaN(f) && f <= new Date()
 }
+
+/**
+ * Infiere el tipo de vehículo desde el prefijo de la placa guatemalteca.
+ * P=particular, M=moto, C=comercial, B=bus, T=taxi, O=oficial, CD=diplomático.
+ * @param {string} placa
+ * @returns {string} tipo de vehículo
+ */
+export function inferirTipoVehiculo(placa) {
+  if (!placa) return 'otro'
+  const p = placa.trim().toUpperCase()
+  if (p.startsWith('CD')) return 'diplomatico'
+  const prefijo = p[0]
+  const tipos = {
+    P: 'particular',
+    M: 'moto',
+    C: 'comercial',
+    B: 'bus',
+    T: 'taxi',
+    O: 'oficial',
+  }
+  return tipos[prefijo] ?? 'otro'
+}
