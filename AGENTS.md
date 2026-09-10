@@ -7,6 +7,7 @@ Guía para agentes de IA y humanos que trabajan en este repo.
 - Vite + React (JavaScript, no TypeScript)
 - Tailwind CSS v4 (plugin `@tailwindcss/vite`, sin tailwind.config)
 - shadcn/ui (componentes en `src/components/ui/`, alias `@/` → `src/`)
+- Font Awesome (`@fortawesome/react-fontawesome` + `free-solid-svg-icons`) — iconos, NO emojis
 - react-router-dom (HashRouter)
 - PWA: Service Worker (`public/sw.js`) + manifest (`public/manifest.json`) + iconos PNG
 - Deploy: Cloudflare Pages
