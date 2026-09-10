@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useI18n } from '@/lib/i18n'
+import { cargarMultasPorPlaca } from '@/lib/data'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 
-// TODO(Lemus): reemplazar por fetch a Google Sheets + Apps Script
+// Fallback si el backend de Sheets no está configurado todavía
 const MOCK_MUNICIPIOS = [
   { id: 'emetra', nombre: 'EMETRA', multas: 2 },
   { id: 'pnc', nombre: 'PNC', multas: 0 },
@@ -16,11 +18,37 @@ const MOCK_MUNICIPIOS = [
 export default function Municipios() {
   const { t } = useI18n()
   const navigate = useNavigate()
-  const [municipios] = useState(MOCK_MUNICIPIOS)
+  const [placas] = useLocalStorage('placas', [])
+  const [municipios, setMunicipios] = useState(MOCK_MUNICIPIOS)
 
   useEffect(() => {
-    // TODO(Lemus): cargar multas reales por placa desde Sheets
-  }, [])
+    let activo = true
+    async function cargar() {
+      const placa = placas[placas.length - 1] ?? ''
+      if (!placa) return
+      const multas = await cargarMultasPorPlaca(placa)
+      if (!activo || multas.length === 0) return // fallback al mock
+
+      // Agrupar por entidad y contar
+      const conteo = {}
+      multas.forEach((m) => {
+        const id = m.entidad.toLowerCase()
+        conteo[id] = (conteo[id] ?? 0) + 1
+      })
+      const nombres = { emetra: 'EMETRA', pnc: 'PNC', muniguate: 'MuniGuate' }
+      setMunicipios(
+        Object.entries(conteo).map(([id, n]) => ({
+          id,
+          nombre: nombres[id] ?? id,
+          multas: n,
+        }))
+      )
+    }
+    cargar()
+    return () => {
+      activo = false
+    }
+  }, [placas])
 
   return (
     <div className="mx-auto max-w-md px-4 py-8">

@@ -1,6 +1,30 @@
 // Carga de datos: infracciones.json + entidades.json
 // Los JSON viven en /public y se cargan con fetch.
 
+// ============================================================
+// BACKEND DEMO — Google Sheets + Apps Script
+// Poné acá la URL del Web App (ver backend/apps-script.gs)
+// ============================================================
+const SHEETS_API_URL = ''; // TODO(André): pegar URL del Web App
+
+/**
+ * Consulta las multas de una placa al backend de Google Sheets.
+ * Si no hay URL configurada o falla, devuelve [] (la UI usa fallback).
+ * @param {string} placa
+ * @returns {Promise<Array>}
+ */
+export async function cargarMultasPorPlaca(placa) {
+  if (!SHEETS_API_URL) return []
+  try {
+    const res = await fetch(`${SHEETS_API_URL}?placa=${encodeURIComponent(placa)}`)
+    if (!res.ok) throw new Error('Backend no respondió')
+    const data = await res.json()
+    return data.ok ? data.multas : []
+  } catch {
+    return []
+  }
+}
+
 export async function cargarInfracciones() {
   const res = await fetch('/infracciones.json')
   if (!res.ok) throw new Error('No se pudo cargar infracciones.json')
