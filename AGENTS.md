@@ -8,7 +8,7 @@ Guía para agentes de IA y humanos que trabajan en este repo.
 - Tailwind CSS v4 (plugin `@tailwindcss/vite`, sin tailwind.config)
 - shadcn/ui (componentes en `src/components/ui/`, alias `@/` → `src/`)
 - react-router-dom (HashRouter)
-- PWA: Service Worker + manifest (pendiente configurar)
+- PWA: Service Worker (`public/sw.js`) + manifest (`public/manifest.json`) + iconos PNG
 - Deploy: Cloudflare Pages
 
 ## Comandos
@@ -73,4 +73,4 @@ data/
 - **Lemus**: conectar `core.js` con screens reales, cargar `infracciones.json` en Form/Explicador, PDF con jsPDF, Google Sheets + Apps Script
 - **Diego**: completar `public/entidades.json` (11 entidades), copy de infracciones
 - **Uriel**: traducciones reales K'iche' + Kawchiquel, paleta, iconos SVG, QA visual
-- **André**: PWA (Service Worker + manifest), deploy Cloudflare Pages
+- **André**: deploy Cloudflare Pages
